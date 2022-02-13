@@ -1,0 +1,42 @@
+﻿@page "/Cerveza"
+@using WebAppBlazorCRUD.Data
+@inject HttpClient Http
+@inject NavigationManager navegador  
+
+<h3>Cerveza</h3>
+
+<EditForm Model="@cerveza" OnValidSubmit="@Guardar">
+    <div class=" container-fluid">
+        <div class=" form-group row mb-1">
+            <label class="col-sm-3">Nombre</label>
+            <div class=" col-sm-9">
+                <InputText class="form-control" @bind-Value="@cerveza.Nombre"></InputText>
+                <ValidationMessage For="@(()=>cerveza.Nombre)"/>
+            </div>
+        </div>
+        <div class=" form-group row mb-1">
+            <label class="col-sm-3">Marca</label>
+            <div class=" col-sm-9">
+                <InputText class="form-control" @bind-Value="@cerveza.Marca"></InputText>
+            </div>
+        </div>
+        <div class=" form-group row mb-1">
+
+            <div class=" col-sm-12">
+                <button type="submit" class=" btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+    <DataAnnotationsValidator/>
+</EditForm>
+@code {
+    public string URL = "/api/Cerveza";
+    Cerveza cerveza = new Cerveza();   
+    private async Task Guardar()
+    {
+       await Http.PostAsJsonAsync<Cerveza>(URL, cerveza);
+        
+        navegador.NavigateTo("/Cervezas");
+    }
+
+}

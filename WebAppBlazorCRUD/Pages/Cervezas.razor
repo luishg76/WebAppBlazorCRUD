@@ -1,0 +1,60 @@
+﻿@page "/cervezas"
+@using WebAppBlazorCRUD.Data
+@inject HttpClient Http
+
+<h3>Cervezas</h3>
+
+<div class=" row">
+    <div class=" col-12 text-left">
+        <a class="btn btn-success" href="Cerveza">Nueva</a>
+    </div>
+</div>
+
+  @if (lstcervezas == null)
+  { 
+     <text>Cargando...</text>
+  }
+  else if (lstcervezas.Count == 0)
+  {
+     <text>No existen elementos para mostrar</text>
+  }
+  else 
+  { 
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Nombre</td>
+                <td>Marca</td>
+                <td colspan="2">Opciones</td>
+            </tr>
+        </thead>
+        <tbody>
+           
+            @foreach (Cerveza item in lstcervezas)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Marca</td>
+                    <td><a href="#">Edit</a></td>
+                    <td><a href="#">Eliminar</a></td>
+                </tr>
+            }            
+
+        </tbody>
+
+     </table>
+    }
+@code
+{
+    public string URL = "/api/Cerveza";
+    public List<Cerveza> lstcervezas = null;
+    protected override async Task OnInitializedAsync()
+    {
+        await Cargar_Datos();
+    }
+
+    private async Task Cargar_Datos()=>lstcervezas = await Http.GetFromJsonAsync<List<Cerveza>>(URL);
+
+}
